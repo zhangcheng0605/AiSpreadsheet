@@ -29,6 +29,42 @@ Open `index.html`. That's it. No build step, no bundler, no framework, no server
 
 Everything is reachable from the command palette (`Ctrl/Cmd+K`).
 
+## Put it on a website
+
+It's one static file with no build step, so any web host will do — upload `index.html` and open it.
+No Node, no server runtime, no configuration.
+
+**GitHub Pages** (already wired up). `.github/workflows/pages.yml` publishes `index.html` on every
+push and enables Pages on first run. Your URL will be:
+
+```
+https://<your-username>.github.io/AiSpreadsheet/
+```
+
+If the first run fails on permissions, set **Settings → Pages → Source** to *GitHub Actions* once
+and re-run it.
+
+**Anywhere else.** Drag `index.html` onto [Netlify Drop](https://app.netlify.com/drop), or drop it in
+an S3 bucket, a `public/` folder, or `/var/www/`. It is a leaf — nothing links out of it.
+
+**Embed it in a page you already have.** Use an iframe; the app fills whatever box you give it and
+stays inside it.
+
+```html
+<iframe src="/onesheet.html"
+        title="OneSheet"
+        style="width:100%;height:620px;border:1px solid #d1d5db;border-radius:12px"
+        allow="clipboard-read; clipboard-write"></iframe>
+```
+
+The `allow` attribute is what lets Ctrl+C/Ctrl+V talk to the system clipboard from inside the frame.
+Give it at least ~500 px of height so the grid, formula bar and status bar all have room.
+
+**Serve it over HTTPS.** Two browser APIs the app uses — the async clipboard and (in a cross-origin
+iframe) localStorage — are restricted on plain `http://`. Both have fallbacks and neither will crash
+on http, but you lose one-click "Copy share link" and autosave. GitHub Pages, Netlify and Cloudflare
+Pages are all HTTPS by default.
+
 ## Architecture
 
 Five modules, strict one-way dependencies. `ENGINE` contains no DOM references at all.
