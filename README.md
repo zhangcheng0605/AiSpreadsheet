@@ -34,15 +34,15 @@ Everything is reachable from the command palette (`Ctrl/Cmd+K`).
 It's one static file with no build step, so any web host will do — upload `index.html` and open it.
 No Node, no server runtime, no configuration.
 
-**GitHub Pages** (already wired up). `.github/workflows/pages.yml` publishes `index.html` on every
-push and enables Pages on first run. Your URL will be:
+**GitHub Pages.** `index.html` is at the repo root, so Pages can serve it directly — no build, no CI
+job. One time, in the repository:
 
-```
-https://<your-username>.github.io/AiSpreadsheet/
-```
+> **Settings → Pages → Build and deployment → Source: _Deploy from a branch_**
+> **Branch:** your default branch · **Folder:** `/ (root)` → **Save**
 
-If the first run fails on permissions, set **Settings → Pages → Source** to *GitHub Actions* once
-and re-run it.
+Give it about a minute, then it's live at `https://<your-username>.github.io/<repo>/`, and every
+push republishes it automatically. There is deliberately no Actions workflow here: a pipeline whose
+entire job is to copy one file is the kind of machinery this project exists to argue against.
 
 **Anywhere else.** Drag `index.html` onto [Netlify Drop](https://app.netlify.com/drop), or drop it in
 an S3 bucket, a `public/` folder, or `/var/www/`. It is a leaf — nothing links out of it.
